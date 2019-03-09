@@ -26,11 +26,16 @@
             // Проверить наличие такого запроса в routes.php
             foreach ($this->routes as $uriPattern => $path) {
                 if(preg_match("~$uriPattern~", $uri)){
-                    $segment = explode('/', $path);
+
+				    $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
+
+                    $segment = explode('/', $internalRoute);
                     $controllerName = array_shift($segment).'Controller';
                     $controllerName = ucfirst($controllerName);
 
                     $actionName = 'action'.ucfirst(array_shift($segment));
+
+                    $parameters = $segment;
 
                     // Подключить файл класса-контроллера
                     $controllerFile = ROOT . '/controllers/' . $controllerName . '.php';
@@ -41,7 +46,9 @@
 
                     // Создать объект, вызвать метод (т.е. action)
                     $controllerObject = new $controllerName;
-                    $result = $controllerObject->$actionName();
+
+                    $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+
                     if ($result != null) {
                         break;
                     }

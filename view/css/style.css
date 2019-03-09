@@ -52,6 +52,16 @@ div.content {
     display: flex;
     flex-direction: column;
 }
+
+.cardContainer a {
+    color: black;
+}
+
+.cardContainer a:hover {
+    text-decoration: none;
+    color: gray;
+}
+
 .employee {
     display: flex;
     margin: 5px 5px 5px 5px;
