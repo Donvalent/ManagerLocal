@@ -76,3 +76,7 @@ div.content {
 .name, .phone, .email {
     margin: 0;
 }
+
+tbody tr:hover{
+    background-color: gray;
+}
