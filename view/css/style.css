@@ -1,3 +1,7 @@
+a, a:hover {
+    color: black;
+}
+
 .sidenav{
     margin: 0;
     padding: 0;
@@ -75,8 +79,4 @@ div.content {
 
 .name, .phone, .email {
     margin: 0;
-}
-
-tbody tr:hover{
-    background-color: gray;
 }

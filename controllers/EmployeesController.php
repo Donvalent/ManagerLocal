@@ -1,6 +1,7 @@
 <?php
 
     include_once ROOT. '/models/Employees.php';
+    include_once ROOT. '/models/Departments.php';
 
     class EmployeesController
     {
@@ -19,6 +20,50 @@
             $Employee = Employees::getEmployeeById($id);
 
             require_once(ROOT . '/view/Employees/view.php');
+
+            return true;
+        }
+        public function actionEdit($id)
+        {
+            $Employee = array();
+            $Employee = Employees::getEmployeeById($id);
+
+            $Departments = array();
+            $Departments = Departments::getDepartmentsList();
+
+            if(isset($_POST['submit']))
+            {
+                $name = $_POST['name'];
+                $surname = $_POST['surname'];
+                $lastname = $_POST['lastname'];
+                $gender = $_POST['gender'];
+                $salary = $_POST['salary'];
+
+                // TODO: update employee
+            }
+
+            require_once(ROOT . '/view/Employees/edit.php');
+            
+            return true;
+        }
+        public function actionAdd()
+        {
+            $Departments = array();
+            $Departments = Departments::getDepartmentsList();
+
+            if(isset($_POST['submit']))
+            {
+                $name = $_POST['name'];
+                $surname = $_POST['surname'];
+                $lastname = $_POST['lastname'];
+                $gender = $_POST['gender'];
+                $salary = $_POST['salary'];
+                $departments = $_POST['departments'];
+
+                // TODO: add employee
+            }
+
+            include_once(ROOT . '/view/Employees/add.php');
 
             return true;
         }

@@ -68,7 +68,7 @@ class Employees
         $db = Db::getConnection();
 
         $result = $db->query(
-            'SELECT users.fullName, users.phone, users.email, positions.title as position, positions.salary '
+            'SELECT users.fullName, users.phone, users.email, users.gender, positions.title as position, positions.salary '
             . 'FROM users '
             . 'JOIN positions on positions.id = users.position '
             . 'WHERE users.id = \''.$id.'\';'
@@ -84,6 +84,7 @@ class Employees
             $employee['lastname'] = $fullname['lastname'];
             $employee['phone'] = $row['phone'];
             $employee['email'] = $row['email'];
+            $employee['gender'] = $row['gender'];
             //$employee['department'] = $row['department'];
             $employee['position'] = $row['position'];
             $employee['salary'] = $row['salary'];

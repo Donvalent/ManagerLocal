@@ -12,11 +12,12 @@
             <th scope="col">Должность</th>
             <th scope="col">Зарплата</th>
             <th scope="col">Отделы</th>
+            <th scope="col">Функции</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach($EmployeesList as $Employees => $Employee): ?>
-        <tr onclick="window.location.href='employees/<?php echo $Employee['id']; ?>'; return false">
+        <tr>
             <td><?php echo $Employee['name']; ?></td>
             <td><?php echo $Employee['surname']; ?></td>
             <td><?php echo $Employee['lastname']; ?></td>
@@ -30,10 +31,12 @@
                 </a>
                 <?php endforeach; ?>
             </td>
+            <td><a href="/employees/edit/<?php echo $Employee['id']; ?>"><i class="fa fa-edit"></i></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+<a href="/employees/add"><i class="fa fa-plus"></i> Новый сотрудник</a>
 
 <!-- Footer -->
 <?php  include_once(ROOT . '/view/layouts/footer.html'); ?>

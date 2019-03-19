@@ -8,7 +8,7 @@
         {
                         
 
-            require_once(ROOT . '/view/Tasks.php');
+            require_once(ROOT . '/view/Tasks/index.php');
 
             return true;
         }
