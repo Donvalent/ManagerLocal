@@ -16,6 +16,31 @@ class Employees
         return $cutFullName;
     }
 
+    private static function updatePersonalInfo($id, $fullname, $gender, $email, $phone)
+    {
+        $db = Db::getConnection();
+        $sql =
+        'UPDATE users '
+        . 'SET '
+            . 'fullName = \'' . $fullname . '\', '
+            . 'gender = \'' . $gender . '\', '
+            . 'phone = \'' . $phone . '\', '
+            . 'email = \'' . $email. '\' '
+        . 'WHERE users.id = \'' . $id . '\'; ';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();    
+    }
+
+    private static function updateEmpInfoOfDep($id, int $position, int $salary, array $departments)
+    {
+        $db = Db::getConnection();
+        $sql = '';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+    }
+
     public static function getEmployeesList()
     {
         $employeesList = array();
@@ -41,7 +66,7 @@ class Employees
             $employeesList[$i]['salary'] = $row['salary'];
 
             $result_Departments = $db->query(
-                'SELECT departmens.title as departments '
+                'SELECT departmens.title as department '
                 . 'FROM departmens '
                 . 'JOIN department_staff on department_staff.departments_id = departmens.id '
                 . 'JOIN users on users.id = department_staff.workers_id '
@@ -50,10 +75,12 @@ class Employees
 
             $departments = array();
 
-            while($row_d = $result_Departments->fetch()){
-                array_push($departments,$row_d['departments']);
+
+            while($row_d = $result_Departments->fetch()){    
+                array_push($departments,$row_d['department']);     
             }
     
+
             $employeesList[$i]['departments'] = $departments;
 
             $i++;
@@ -85,13 +112,12 @@ class Employees
             $employee['phone'] = $row['phone'];
             $employee['email'] = $row['email'];
             $employee['gender'] = $row['gender'];
-            //$employee['department'] = $row['department'];
             $employee['position'] = $row['position'];
             $employee['salary'] = $row['salary'];
         }
 
-        $result = $db->query(
-            'SELECT departmens.title as departments '
+        $result_Departments = $db->query(
+            'SELECT departmens.title as department '
             . 'FROM departmens '
             . 'JOIN department_staff on department_staff.departments_id = departmens.id '
             . 'JOIN users on users.id = department_staff.workers_id '
@@ -100,12 +126,18 @@ class Employees
 
         $departments = array();
 
-        while($row = $result->fetch()){
-            array_push($departments,$row['departments']);
+
+        while($row_d = $result_Departments->fetch()){
+            array_push($departments,$row_d['department']);   
         }
 
         $employee['departments'] = $departments;
 
         return $employee;
+    }
+
+    public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone)
+    {
+        static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
     }
 }

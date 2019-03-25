@@ -13,7 +13,7 @@
     <tbody>
         <?php foreach($departmentsList as $departments => $department): ?>
             <tr>
-                <td><?php echo $department['title']; ?></td>
+                <td><a href="/departments/view/<?php echo $department['id']; ?>"><?php echo $department['title']; ?></a></td>
                 <td><?php echo $department['countEmployees']; ?></td>
                 <td><?php echo $department['maxSalary']; ?> руб</td>
             </tr>

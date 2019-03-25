@@ -21,6 +21,18 @@
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
+        <input type="text" name="email" placeholder="Почта..." required>
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
+        <input type="phone" name="phone" placeholder="Телефон..." required>
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
+        <input type="text" name="position" placeholder="Должность..." required>
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
         <input type="number" name="salary" placeholder="Зарплата..." value="<?php echo $Employee['salary']; ?>" required>
     </div>
 
@@ -38,7 +50,7 @@
             <?php endforeach; ?>
         </select>
     </div>
-    <button class="btn btn-primary" type="submit" name="submit"></button>
+    <button class="btn btn-primary" type="submit" name="submit">Обновить</button>
 </form>
 
 

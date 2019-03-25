@@ -5,6 +5,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th scope="col"></th>
             <th scope="col">Имя</th>
             <th scope="col">Фамилия</th>
             <th scope="col">Отчество</th>
@@ -12,12 +13,13 @@
             <th scope="col">Должность</th>
             <th scope="col">Зарплата</th>
             <th scope="col">Отделы</th>
-            <th scope="col">Функции</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         <?php foreach($EmployeesList as $Employees => $Employee): ?>
         <tr>
+            <td><a href="/employees/view/<?php echo $Employee['id']; ?>"><i class="fa fa-share"></i></a></td>
             <td><?php echo $Employee['name']; ?></td>
             <td><?php echo $Employee['surname']; ?></td>
             <td><?php echo $Employee['lastname']; ?></td>
@@ -36,7 +38,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<a href="/employees/add"><i class="fa fa-plus"></i> Новый сотрудник</a>
+<a href="/employees/add" class="btn btn-primary"><i class="fa fa-plus"></i> Новый сотрудник</a>
 
 <!-- Footer -->
 <?php  include_once(ROOT . '/view/layouts/footer.html'); ?>

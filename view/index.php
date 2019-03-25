@@ -7,14 +7,16 @@
         <tr>
             <th scope="col">Сотрудники</th>
             <?php foreach($departmentsList as $departments => $department): ?>
-                <th scope="col"><?php echo $department['title']; ?></th>
+                <th scope="col"><a href="/departments/view/<?php echo $department['id']; ?>"><?php echo $department['title']; ?></a></th>
             <?php endforeach; ?>
         </tr>
     </thead>
     <tbody>
         <?php foreach($employeesList as $employees => $employee): ?>
             <tr>
-                <td><?php echo $employee['surname'];?></td>
+                <!-- Аббревиатура -->
+                <td><a href="/employees/view/<?php echo $employee['id']; ?>"><?php echo $employee['surname'] . '.' . substr($employee['name'],0,2) . '.' . substr($employee['lastname'],0,2) . '.';?></a></td>
+                <!-- Заполнение таблицы -->
                 <?php foreach($departmentsList as $departments => $department): ?>
                     <?php
                         if(in_array($department['title'], $employee['departments']))

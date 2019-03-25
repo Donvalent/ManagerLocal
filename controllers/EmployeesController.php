@@ -16,8 +16,8 @@
         }
         public function actionView($id)
         {
-            $Employee = array();
-            $Employee = Employees::getEmployeeById($id);
+            $EmployeeList = array();
+            $EmployeeList = Employees::getEmployeeById($id);
 
             require_once(ROOT . '/view/Employees/view.php');
 
@@ -33,13 +33,16 @@
 
             if(isset($_POST['submit']))
             {
-                $name = $_POST['name'];
-                $surname = $_POST['surname'];
-                $lastname = $_POST['lastname'];
+                $fullname = $_POST['surname'] . ' ' . $_POST['name'] . ' ' . $_POST['lastname'];
                 $gender = $_POST['gender'];
-                $salary = $_POST['salary'];
+                $email = $_POST['email'];
+                $phone = $_POST['phone'];
+                //$position = $_POST['position'];
+                //$salary = $_POST['salary'];
+                //$departments = $_POST['departments'];
 
-                // TODO: update employee
+
+                Employees::updateEmployee($id, $fullname, $gender, $email, $phone);
             }
 
             require_once(ROOT . '/view/Employees/edit.php');
