@@ -20,6 +20,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<a href="/departments/add" class="btn btn-primary"><i class="fa fa-plus"></i>Новый отдел</a>
 
 <!-- Footer -->
 <?php  include_once(ROOT . '/view/layouts/footer.html'); ?>

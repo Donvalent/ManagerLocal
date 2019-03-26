@@ -4,6 +4,9 @@ include_once(ROOT . '/components/Db.php');
 
 class Departments
 {
+    // *********************
+    //    Private function
+    // *********************
     private static function getCountOfEmployees($departmentId)
     {
         $count = 0;
@@ -41,7 +44,39 @@ class Departments
 
         return $salary;
     }
+    /**
+     * SQL request for adding new department
+     * 
+     * @param string $title Department title
+     * @return int Department new id
+     */
+    private static function newDepartment($title)
+    {
+        $db = Db::getConnection();
+        $sql =
+        'INSERT INTO '
+        . 'departmens '
+            . '(id, title) '
+        . 'VALUES '
+            . '(NULL, \'' . $title . '\')';
 
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        $sql = 
+        'SELECT departmens.id '
+        . 'FROM departmens '
+        . 'WHERE departmens.title = \'' . $title . '\' ';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            return $row['id'];
+        }
+    }
+    // *********************
+    //    Public function
+    // *********************
     public static function getDepartmentsList()
     {
         $departments = array();
@@ -65,5 +100,15 @@ class Departments
         }
 
         return $departments;
+    }
+    /**
+     * Add new department
+     * 
+     * @param string $title Department title
+     * @param array $employees Department employees
+     */
+    public static function addDepartment(string $title, array $employees = null)
+    {
+        $departmentId = static::newDepartment($title);
     }
 }

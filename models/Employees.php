@@ -15,7 +15,14 @@ class Employees
 
         return $cutFullName;
     }
-
+    private static function getShortName($fullname)
+    {
+        $cutName = static::cutName($fullname);
+        return $cutName['surname'] . '.' . mb_substr($cutName['name'], 0, 1) . '.' . mb_substr($cutName['lastname'], 0, 1);
+    }
+    /**
+     * Updating employee personal info
+     */
     private static function updatePersonalInfo($id, $fullname, $gender, $email, $phone)
     {
         $db = Db::getConnection();
@@ -31,11 +38,44 @@ class Employees
         $stmt = $db->prepare($sql);
         $stmt->execute();    
     }
-
-    private static function updateEmpInfoOfDep($id, int $position, int $salary, array $departments)
+    /**
+     * Updating employee departments info
+     * 
+     * @param int $id Employees id
+     * @param array $departments Departments titles
+     */
+    private static function updateEmpDepInfo($id, array $departments)
     {
         $db = Db::getConnection();
-        $sql = '';
+        
+        foreach ($departments as $department => $value) {
+
+            $sql = 'SELECT departmens.id '
+            . 'FROM departmens '
+            . 'WHERE departmens.title = \'' . $value . '\'';
+            
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            while($row = $stmt->fetch()){
+                
+            }
+        }
+    }
+    /**
+     * Udpating employee positions info
+     * 
+     * @param int $id Employee id
+     * @param string $position Employee positions title
+     * @param int $salary Employee salary
+     */
+    private static function updateEmpPosInfo($id, $position, $salary)
+    {
+        $db = Db::getConnection();
+        $sql = 'UPDATE positions '
+        . 'SET '
+            . 'title = \'' . $position . '\', '
+            . 'salary = \'' . $salary . '\' '
+        . 'WHERE id = \'' . $id . '\';';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -61,6 +101,7 @@ class Employees
             $employeesList[$i]['name'] = $fullname['name'];
             $employeesList[$i]['surname'] = $fullname['surname'];
             $employeesList[$i]['lastname'] = $fullname['lastname'];
+            $employeesList[$i]['shortName'] = static::getShortName($row['fullName']);
             $employeesList[$i]['gender'] = $row['gender'];
             $employeesList[$i]['position'] = $row['position'];
             $employeesList[$i]['salary'] = $row['salary'];
@@ -136,8 +177,11 @@ class Employees
         return $employee;
     }
 
-    public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone)
+    public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone, string $positions, int $salary, array $departments)
     {
-        static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
+        //$employee = static::getEmployeeById($id);
+        //static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
+        //static::updateEmpPosInfo($id, $position, $salary);
+        //static::updateEmpDepInfo($id, $departments);
     }
 }

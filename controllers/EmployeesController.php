@@ -37,12 +37,11 @@
                 $gender = $_POST['gender'];
                 $email = $_POST['email'];
                 $phone = $_POST['phone'];
-                //$position = $_POST['position'];
-                //$salary = $_POST['salary'];
-                //$departments = $_POST['departments'];
+                $position = $_POST['position'];
+                $salary = $_POST['salary'];
+                $departments = $_POST['departments'];
 
-
-                Employees::updateEmployee($id, $fullname, $gender, $email, $phone);
+                Employees::updateEmployee($id, $fullname, $gender, $email, $phone, $position, $salary, $departments);
             }
 
             require_once(ROOT . '/view/Employees/edit.php');

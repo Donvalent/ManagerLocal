@@ -10,6 +10,7 @@
         'tasks' => 'tasks/index',
 
         // Departments
+        'departments/add' => 'departments/add',
         'departments' => 'departments/index',
 
         '' => 'site/index',
