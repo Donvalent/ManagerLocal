@@ -7,6 +7,7 @@ class Departments
     // *********************
     //    Private function
     // *********************
+
     private static function getCountOfEmployees($departmentId)
     {
         $count = 0;
@@ -25,6 +26,7 @@ class Departments
 
         return $count;
     }
+
     private static function getMaxSalary($departmentId)
     {
         $salary = 0;
@@ -44,6 +46,7 @@ class Departments
 
         return $salary;
     }
+
     /**
      * SQL request for adding new department
      * 
@@ -74,18 +77,47 @@ class Departments
             return $row['id'];
         }
     }
+
+    /**
+     * Fill the department
+     * 
+     * @param int $departmentId Departments id
+     * @param array $employees New department employees
+     */
+    private static function fillDepartment($departmentId, $employees)
+    {
+        $db = Db::getConnection();
+        foreach ($employees as $employee => $value) {
+            // Получение id работника по ФИО
+            $sql = 'SELECT users.id '
+            . 'FROM users '
+            . 'WHERE users.fullName = \''. $value .'\';';
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch())
+            {
+                // Заполнение отдела по id работниками по id
+                $sql =
+                'INSERT INTO department_staff (department_staff.departments_id, department_staff.workers_id) '
+                . 'VALUES ('.  $departmentId .', '. $row['id'] .');';
+                $stmt = $db->prepare($sql);
+                $stmt->execute();
+            }
+        }          
+    }
     // *********************
     //    Public function
     // *********************
+
     public static function getDepartmentsList()
     {
         $departments = array();
         $db = Db::getConnection();
         
         $result = $db->query(
-            'SELECT departmens.id, departmens.title, users.fullName as leader '
-            . 'FROM departmens '
-            . 'JOIN users on users.id = departmens.id;'
+            'SELECT departmens.id, departmens.title '
+            . 'FROM departmens'
         );
 
         $i = 0;
@@ -93,7 +125,6 @@ class Departments
         while ($row = $result->fetch()) {
             $departments[$i]['id'] = $row['id'];
             $departments[$i]['title'] = $row['title'];
-            $departments[$i]['leader'] = $row['leader'];
             $departments[$i]['countEmployees'] = static::getCountOfEmployees($row['id']);
             $departments[$i]['maxSalary'] = static::getMaxSalary($row['id']);
             $i++;
@@ -101,6 +132,29 @@ class Departments
 
         return $departments;
     }
+
+    public static function getDepartmentById($departmentId)
+    {
+        $department = array();
+
+        $db = Db::getConnection();
+        
+        $result = $db->query(
+            'SELECT departmens.id, departmens.title '
+            . 'FROM departmens '
+            . 'WHERE departmens.id = '. $departmentId .';'
+        );
+
+        while ($row = $result->fetch()) {
+            $department['id'] = $row['id'];
+            $department['title'] = $row['title'];
+            $department['countEmployees'] = static::getCountOfEmployees($row['id']);
+            $department['maxSalary'] = static::getMaxSalary($row['id']);
+        }
+
+        return $department;
+    }
+
     /**
      * Add new department
      * 
@@ -110,5 +164,9 @@ class Departments
     public static function addDepartment(string $title, array $employees = null)
     {
         $departmentId = static::newDepartment($title);
+
+        if($employees != null){
+            static::fillDepartment($departmentId, $employees);
+        }
     }
 }

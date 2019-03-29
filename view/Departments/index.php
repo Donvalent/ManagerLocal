@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($departmentsList as $departments => $department): ?>
+        <?php foreach($departmentsList as $department): ?>
             <tr>
                 <td><a href="/departments/view/<?php echo $department['id']; ?>"><?php echo $department['title']; ?></a></td>
                 <td><?php echo $department['countEmployees']; ?></td>
@@ -20,7 +20,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<a href="/departments/add" class="btn btn-primary"><i class="fa fa-plus"></i>Новый отдел</a>
+<a href="/departments/add" class="btn btn-primary"><i class="fa fa-plus"></i> Новый отдел</a>
 
 <!-- Footer -->
 <?php  include_once(ROOT . '/view/layouts/footer.html'); ?>

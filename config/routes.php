@@ -10,6 +10,7 @@
         'tasks' => 'tasks/index',
 
         // Departments
+        'departments/view/([0-9]+)' => 'departments/view/$1',
         'departments/add' => 'departments/add',
         'departments' => 'departments/index',
 

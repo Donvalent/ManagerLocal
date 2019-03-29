@@ -21,15 +21,15 @@
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
-        <input type="text" name="email" placeholder="Почта..." required>
+        <input type="text" name="email" placeholder="Почта..." value="<?php echo $Employee['email']; ?>" required>
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
-        <input type="phone" name="phone" placeholder="Телефон..." required>
+        <input type="phone" name="phone" placeholder="Телефон..." value="<?php echo $Employee['phone']; ?>" required>
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">
-        <input type="text" name="position" placeholder="Должность..." required>
+        <input type="text" name="position" placeholder="Должность..." value="<?php echo $Employee['position']; ?>" required>
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-12 form-group text-center">

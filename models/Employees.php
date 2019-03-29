@@ -48,16 +48,29 @@ class Employees
     {
         $db = Db::getConnection();
         
-        foreach ($departments as $department => $value) {
+        // Удаление сотрудника из всех отделов
+        $sql = 'DELETE FROM department_staff '
+        . 'WHERE department_staff.workers_id = '. $id .';';
 
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        foreach ($departments as $department => $value)
+        {
+            // Получение id отдела
             $sql = 'SELECT departmens.id '
             . 'FROM departmens '
             . 'WHERE departmens.title = \'' . $value . '\'';
-            
             $stmt = $db->prepare($sql);
             $stmt->execute();
+
+            // Запись в этот отдел сотрудника
             while($row = $stmt->fetch()){
-                
+                $sql = 'INSERT INTO department_staff(department_staff.departments_id, department_staff.workers_id) '
+                . 'VALUES ('. $row['id'] .', '. $id .');';
+
+                $stmt = $db->prepare($sql);
+                $stmt->execute();
             }
         }
     }
@@ -130,6 +143,46 @@ class Employees
         return $employeesList;
     }
 
+    public static function getEmployeesListByDepartment($id)
+    {
+        $employeesList = array();
+        $db = Db::getConnection();
+
+        $sql =
+        'SELECT users.id, users.fullName, users.gender, positions.title '
+        . 'FROM users '
+
+        . 'LEFT JOIN positions '
+        . 'ON positions.id = users.id '
+
+        . 'LEFT JOIN department_staff '
+        . 'ON department_staff.workers_id = users.id '
+
+        . 'WHERE department_staff.departments_id =' . $id .';';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        $i = 0;
+
+        while ($row = $stmt->fetch())
+        {
+            $fullname = static::cutName($row['fullName']);
+
+            $employeesList[$i]['id'] = $row['id'];
+            $employeesList[$i]['name'] = $fullname['name'];
+            $employeesList[$i]['surname'] = $fullname['surname'];
+            $employeesList[$i]['lastname'] = $fullname['lastname'];
+            $employeesList[$i]['shortName'] = static::getShortName($row['fullName']);
+            $employeesList[$i]['gender'] = $row['gender'];
+            $employeesList[$i]['position'] = $row['title'];
+            
+            $i++;
+        }
+
+        return $employeesList;
+    }
+
     public static function getEmployeeById($id)
     {
         $employee = array();
@@ -177,11 +230,11 @@ class Employees
         return $employee;
     }
 
-    public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone, string $positions, int $salary, array $departments)
+    public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone, string $position, int $salary, array $departments)
     {
-        //$employee = static::getEmployeeById($id);
-        //static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
-        //static::updateEmpPosInfo($id, $position, $salary);
-        //static::updateEmpDepInfo($id, $departments);
+        $employee = static::getEmployeeById($id);
+        static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
+        static::updateEmpPosInfo($id, $position, $salary);
+        static::updateEmpDepInfo($id, $departments);
     }
 }

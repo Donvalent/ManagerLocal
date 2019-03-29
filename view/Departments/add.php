@@ -15,7 +15,7 @@
             <select multiple class="selectpicker" name="employees[]" data-live-search="true" data-size="5" id="MultiplieSelect1">
                 <?php foreach($employeesList as $employees => $employee): ?>
                     <option title="<?php  echo $employee['shortName'];?>">
-                        <?php echo $employee['surname'] . ' ' . $employee['name'] . ' ' . $employee['surname']; ?>
+                        <?php echo $employee['surname'] . ' ' . $employee['name'] . ' ' . $employee['lastname']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
