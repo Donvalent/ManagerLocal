@@ -22,6 +22,14 @@
         </div>
 
         <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
+            <input type="text" name="email" placeholder="Почта...">
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
+            <input type="text" name="position" placeholder="Должность...">
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
             <input type="number" name="salary" placeholder="Зарплата..." required>
         </div>
 

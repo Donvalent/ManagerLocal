@@ -4,24 +4,51 @@ include_once(ROOT . '/components/Db.php');
 
 class Employees
 {
-    private static function cutName($fullName)
+    // *********************
+    //    Private functions
+    // *********************
+
+    /**
+     * Trim fullname to name, surname, lastname
+     * 
+     * @param string $fullName Employees fullname
+     * 
+     * @return array Associative array containing
+     *              'name', 'surname', 'lastname' elements
+     */
+    private static function trimName($fullName)
     {
-        $cutter = explode(' ', $fullName);
-        $cutFullName = array(
-            'name' => $cutter[1],
-            'surname' => $cutter[0],
-            'lastname' => $cutter[2]
+        $tName = explode(' ', $fullName);
+        $result = array(
+            'name' => $tName[1],
+            'surname' => $tName[0],
+            'lastname' => $tName[2]
         );
 
-        return $cutFullName;
+        return $result;
     }
+
+    /**
+     * Cut fullname into a shortname 
+     * 
+     * @param string $fullname Employees fullname
+     * 
+     * @return string Employees shortname
+     */
     private static function getShortName($fullname)
     {
-        $cutName = static::cutName($fullname);
-        return $cutName['surname'] . '.' . mb_substr($cutName['name'], 0, 1) . '.' . mb_substr($cutName['lastname'], 0, 1);
+        $tname = static::trimName($fullname);
+        return $tname['surname'] . '.' . mb_substr($tname['name'], 0, 1) . '.' . mb_substr($tname['lastname'], 0, 1);
     }
+
     /**
      * Updating employee personal info
+     * 
+     * @param int $id Employees id
+     * @param string $fullname Employees fullname
+     * @param string $gender Employees gender
+     * @param string $email Employees email
+     * @param string $phone Employees phone
      */
     private static function updatePersonalInfo($id, $fullname, $gender, $email, $phone)
     {
@@ -38,8 +65,9 @@ class Employees
         $stmt = $db->prepare($sql);
         $stmt->execute();    
     }
+
     /**
-     * Updating employee departments info
+     * Updating employees departments info
      * 
      * @param int $id Employees id
      * @param array $departments Departments titles
@@ -58,9 +86,9 @@ class Employees
         foreach ($departments as $department => $value)
         {
             // Получение id отдела
-            $sql = 'SELECT departmens.id '
-            . 'FROM departmens '
-            . 'WHERE departmens.title = \'' . $value . '\'';
+            $sql = 'SELECT departments.id '
+            . 'FROM departments '
+            . 'WHERE departments.title = \'' . $value . '\'';
             $stmt = $db->prepare($sql);
             $stmt->execute();
 
@@ -74,8 +102,9 @@ class Employees
             }
         }
     }
+
     /**
-     * Udpating employee positions info
+     * Udpating employees positions info
      * 
      * @param int $id Employee id
      * @param string $position Employee positions title
@@ -94,6 +123,19 @@ class Employees
         $stmt->execute();
     }
 
+    
+
+    // *********************
+    //    Public functions
+    // *********************
+
+    /**
+     * Getting list of employees
+     * 
+     * @return array Associative array containing
+     *              'id', 'name', 'surname', 'lastname', 'shortName', 'gender', 'position', 'salary'
+     *              'array of departments titles'
+     */
     public static function getEmployeesList()
     {
         $employeesList = array();
@@ -107,8 +149,7 @@ class Employees
 
         $i = 0;
         while($row = $result->fetch()){
-
-            $fullname = static::cutName($row['fullName']);
+            $fullname = static::trimName($row['fullName']);
 
             $employeesList[$i]['id'] = $row['id'];
             $employeesList[$i]['name'] = $fullname['name'];
@@ -119,17 +160,18 @@ class Employees
             $employeesList[$i]['position'] = $row['position'];
             $employeesList[$i]['salary'] = $row['salary'];
 
+            // Getting departments list of employee
             $result_Departments = $db->query(
-                'SELECT departmens.title as department '
-                . 'FROM departmens '
-                . 'JOIN department_staff on department_staff.departments_id = departmens.id '
+                'SELECT departments.title as department '
+                . 'FROM departments '
+                . 'JOIN department_staff on department_staff.departments_id = departments.id '
                 . 'JOIN users on users.id = department_staff.workers_id '
                 . 'WHERE users.id = \'' . $row['id'] . '\';'
             );
 
             $departments = array();
 
-
+            // Writing departments list to result array
             while($row_d = $result_Departments->fetch()){    
                 array_push($departments,$row_d['department']);     
             }
@@ -143,11 +185,21 @@ class Employees
         return $employeesList;
     }
 
+    /**
+     * Getting list of employees by deraptment id
+     * 
+     * @param int $id Departments id
+     * 
+     * @return array Associative array containing
+     *              'id', 'name', 'surname', 'lastname', 'shortName', 'gender', 'position', 'salary'
+     *              'array of departments titles'
+     */
     public static function getEmployeesListByDepartment($id)
     {
         $employeesList = array();
         $db = Db::getConnection();
 
+        // Getting users info
         $sql =
         'SELECT users.id, users.fullName, users.gender, positions.title '
         . 'FROM users '
@@ -167,7 +219,7 @@ class Employees
 
         while ($row = $stmt->fetch())
         {
-            $fullname = static::cutName($row['fullName']);
+            $fullname = static::trimName($row['fullName']);
 
             $employeesList[$i]['id'] = $row['id'];
             $employeesList[$i]['name'] = $fullname['name'];
@@ -183,11 +235,21 @@ class Employees
         return $employeesList;
     }
 
+    /**
+     * Getting employee by id
+     * 
+     * @param int $id Employees id
+     * 
+     * @return array Associative array containing
+     *              'id', 'name', 'surname', 'lastname', 'shortName', 'gender', 'position', 'salary'
+     *              'array of departments titles'
+     */
     public static function getEmployeeById($id)
     {
         $employee = array();
         $db = Db::getConnection();
 
+        // Getting users info
         $result = $db->query(
             'SELECT users.fullName, users.phone, users.email, users.gender, positions.title as position, positions.salary '
             . 'FROM users '
@@ -197,7 +259,7 @@ class Employees
 
         while($row = $result->fetch()){
 
-            $fullname = static::cutName($row['fullName']);
+            $fullname = static::trimName($row['fullName']);
 
             $employee['id'] = $id;
             $employee['name'] = $fullname['name'];
@@ -210,10 +272,11 @@ class Employees
             $employee['salary'] = $row['salary'];
         }
 
+        // Getting departments info
         $result_Departments = $db->query(
-            'SELECT departmens.title as department '
-            . 'FROM departmens '
-            . 'JOIN department_staff on department_staff.departments_id = departmens.id '
+            'SELECT departments.title as department '
+            . 'FROM departments '
+            . 'JOIN department_staff on department_staff.departments_id = departments.id '
             . 'JOIN users on users.id = department_staff.workers_id '
             . 'WHERE users.id = \'' . $id . '\';'
         );
@@ -230,11 +293,34 @@ class Employees
         return $employee;
     }
 
+    /**
+     * Updating employees info
+     * 
+     * @param int $id Employees id
+     * @param string $fullname Employees fullname
+     * @param string $gender Employees gender
+     * @param string $email Employees email
+     * @param string $phone Employees phone
+     * @param string $position Employees position title
+     * @param int $salary Employees salary
+     * @param array $departments Associative array containing 'title'
+     */
     public static function updateEmployee(int $id, $fullname, string $gender, string $email, string $phone, string $position, int $salary, array $departments)
     {
+
         $employee = static::getEmployeeById($id);
         static::updatePersonalInfo($id, $fullname, $gender, $email, $phone);
         static::updateEmpPosInfo($id, $position, $salary);
         static::updateEmpDepInfo($id, $departments);
+    }
+
+    /**
+     * Adding new employee
+     * 
+     * @param
+     */
+    public static function addEmployee(string $fullname, string $gender, string $email, string $position, int $salary, array $departments)
+    {
+        
     }
 }

@@ -55,14 +55,14 @@
 
             if(isset($_POST['submit']))
             {
-                $name = $_POST['name'];
-                $surname = $_POST['surname'];
-                $lastname = $_POST['lastname'];
+                $fullname = $_POST['name'] . ' ' . $_POST['surname'] . ' ' . $_POST['lastname'];
                 $gender = $_POST['gender'];
+                $email = $_POST['email'];
+                $position = $_POST['position'];
                 $salary = $_POST['salary'];
                 $departments = $_POST['departments'];
 
-                // TODO: add employee
+                Employees::addEmployee($fullname, $gender, $email, $position, $salary, $departments);
             }
 
             include_once(ROOT . '/view/Employees/add.php');

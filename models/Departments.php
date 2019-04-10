@@ -8,6 +8,13 @@ class Departments
     //    Private function
     // *********************
 
+    /**
+     * Getting the count of employees
+     * 
+     * @param int $departmentId Departments id
+     * 
+     * @return int Count of employees
+     */
     private static function getCountOfEmployees($departmentId)
     {
         $count = 0;
@@ -27,6 +34,13 @@ class Departments
         return $count;
     }
 
+    /**
+     * Getting maximum salary of departments employees
+     * 
+     * @param int $departmentId Departments id
+     * 
+     * @return float Max salary
+     */
     private static function getMaxSalary($departmentId)
     {
         $salary = 0;
@@ -48,17 +62,20 @@ class Departments
     }
 
     /**
-     * SQL request for adding new department
+     * Adding new department
      * 
-     * @param string $title Department title
-     * @return int Department new id
+     * @param string @title Title of new department
+     * 
+     * @return int Id of new department
      */
     private static function newDepartment($title)
     {
         $db = Db::getConnection();
+
+        // Adding new department
         $sql =
         'INSERT INTO '
-        . 'departmens '
+        . 'departments '
             . '(id, title) '
         . 'VALUES '
             . '(NULL, \'' . $title . '\')';
@@ -66,10 +83,11 @@ class Departments
         $stmt = $db->prepare($sql);
         $stmt->execute();
 
+        // Getting new departments id
         $sql = 
-        'SELECT departmens.id '
-        . 'FROM departmens '
-        . 'WHERE departmens.title = \'' . $title . '\' ';
+        'SELECT departments.id '
+        . 'FROM departments '
+        . 'WHERE departments.title = \'' . $title . '\' ';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -79,10 +97,10 @@ class Departments
     }
 
     /**
-     * Fill the department
+     * Filling the department with employees
      * 
      * @param int $departmentId Departments id
-     * @param array $employees New department employees
+     * @param array $employees Array fullnames of employees
      */
     private static function fillDepartment($departmentId, $employees)
     {
@@ -106,18 +124,26 @@ class Departments
             }
         }          
     }
+
     // *********************
     //    Public function
     // *********************
 
+    /**
+     * Getting departments list
+     * 
+     * @return array Associative array containing
+     *              'id', 'title', 'countEmployees', 'maxSalary'
+     */
     public static function getDepartmentsList()
     {
         $departments = array();
         $db = Db::getConnection();
-        
+
+        // Getting departments id and title
         $result = $db->query(
-            'SELECT departmens.id, departmens.title '
-            . 'FROM departmens'
+            'SELECT departments.id, departments.title '
+            . 'FROM departments'
         );
 
         $i = 0;
@@ -133,16 +159,25 @@ class Departments
         return $departments;
     }
 
+    /**
+     * Getting department by id
+     * 
+     * @param int $departmentId Departments id
+     * 
+     * @return array Associative array containing
+     *              'id', 'title', 'countEmployees', 'maxSalary'
+     */
     public static function getDepartmentById($departmentId)
     {
         $department = array();
 
         $db = Db::getConnection();
         
+        // Getting departments id and title
         $result = $db->query(
-            'SELECT departmens.id, departmens.title '
-            . 'FROM departmens '
-            . 'WHERE departmens.id = '. $departmentId .';'
+            'SELECT departments.id, departments.title '
+            . 'FROM departments '
+            . 'WHERE departments.id = '. $departmentId .';'
         );
 
         while ($row = $result->fetch()) {
@@ -156,10 +191,10 @@ class Departments
     }
 
     /**
-     * Add new department
+     * Adding new department
      * 
-     * @param string $title Department title
-     * @param array $employees Department employees
+     * @param string $title Departments title
+     * @param array $employees Array of employees names
      */
     public static function addDepartment(string $title, array $employees = null)
     {

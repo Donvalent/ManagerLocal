@@ -1,5 +1,8 @@
 <?php
 
+    include_once ROOT . '/components/Api.php'; 
+    include_once ROOT . '/models/api/UsersApi.php'; 
+
     class Router
     {
         private $routes;
@@ -27,9 +30,32 @@
             foreach ($this->routes as $uriPattern => $path) {
                 if(preg_match("~$uriPattern~", $uri)){
 
-				    $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
+                    $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
 
                     $segment = explode('/', $internalRoute);
+
+                    if($segment[0] == 'api')
+                    {
+                        // Deleting first string from the $segment
+                        array_shift($segment);
+
+                        try {
+                            if(array_shift($segment) == 'error')
+                                throw new RuntimeException('This method is not supported');
+
+                            $modelApi = ucfirst(array_shift($segment)) . 'Api';
+                            if (class_exists($modelApi)){
+                                $api = new $modelApi();
+                                echo $api->run();
+                            } else
+                                throw new RuntimeException('Api not found');
+
+                        } catch (Exception $e) {
+                            echo json_encode(Array('error' => $e->getMessage()));
+                        }
+                        die;
+                    }
+                    
                     $controllerName = array_shift($segment).'Controller';
                     $controllerName = ucfirst($controllerName);
 
@@ -45,8 +71,15 @@
                     }
 
                     // Создать объект, вызвать метод (т.е. action)
-                    $controllerObject = new $controllerName;
+                    // if (class_exists($controllerName)){
+                    //     $controllerObject = new $controllerName;
+                    // }
+                    // else {
+                    //     die;
+                    // }
 
+                    $controllerObject = new $controllerName();
+                    
                     $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
                     if ($result != null) {
