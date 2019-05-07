@@ -93,9 +93,11 @@
             echo "requestParams : " . PHP_EOL;
             print_r($this->requestParams);
 
-            foreach ($dbdata as $key => $value) {
-                if(isset($this->requestParams[$key]))
+            foreach ($this->requestParams as $key => $value) {
+                if (isset($dbdata[$key]))
                     $dbdata[$key] += 1;
+                else
+                    $dbdata[$key] = $value;
             }
 
             $request = $db->prepare(
