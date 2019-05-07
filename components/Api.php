@@ -7,7 +7,8 @@
         protected $method = '';
 
         public $requestUri = [];
-        public $requestParams = [];
+        // JSON
+        public $requestParams = '';
 
         protected $action = '';
 
@@ -69,11 +70,10 @@
 
         private function getRequestParams($method)
         {
-            // GET или POST: данные возвращаем как есть
-            if ($method === 'POST') return $_POST;
+            // GET данные возвращаем как есть
             if ($method === 'GET') return $_GET;
         
-            // PUT, PATCH или DELETE
+            // POST, PUT, PATCH или DELETE
             $data = array();
             $exploded = explode('&', file_get_contents('php://input'));
         

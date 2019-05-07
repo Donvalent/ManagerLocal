@@ -55,10 +55,9 @@
 
             $usersId = array_shift($this->requestUri);
             $date = array_shift($this->requestUri);
-            $data = $this->requestParams;
             $params = [];
 
-            array_push($params, $usersId, $date, json_encode($data, JSON_UNESCAPED_UNICODE));
+            array_push($params, $usersId, $date, json_encode($this->requestParams), JSON_UNESCAPED_UNICODE);
 
             $this->createString($params);
         }
@@ -72,8 +71,6 @@
         public function updateAction()
         {
             // TODO: Проверка авторизации...
-
-            // TODO: Фильтрация...
             
             echo '-----------------------------------------' . PHP_EOL;
 
@@ -83,17 +80,23 @@
                 .     'info '
                 . 'FROM '
                 .    'days_info '
-                . 'WHERE users_id = 1;'
+                . 'WHERE users_id = 2;'
             );
 
             while ($row = $request->fetch()) {
                 $dbdata = json_decode($row['info'], true);
             }
 
-            // foreach ($dbdata as $key => $value) {
-            //     if($this->requestParams[$key])
-            //         $dbdata[$key] += 2;
-            // }
+            echo "dbdata : " . PHP_EOL;
+            print_r($dbdata);
+
+            echo "requestParams : " . PHP_EOL;
+            print_r($this->requestParams);
+
+            foreach ($dbdata as $key => $value) {
+                if($this->requestParams[$key])
+                    $dbdata[$key] += 1;
+            }
 
             // $request = $db->prepare(
             //     'UPDATE '
@@ -108,10 +111,6 @@
             // $request->execute();
 
             // $result = $request->fetch(PDO::FETCH_ASSOC);
-
-            print_r($this->requestParams);
-
-            print_r($dbdata);
 
             echo PHP_EOL . '-----------------------------------------';
         }
@@ -143,7 +142,5 @@
             $request->execute();
 
             $result = $request->fetch(PDO::FETCH_ASSOC);
-
-            print_r($result);
         }
     }
