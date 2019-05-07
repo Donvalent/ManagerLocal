@@ -94,23 +94,27 @@
             print_r($this->requestParams);
 
             foreach ($dbdata as $key => $value) {
-                if($this->requestParams[$key])
+                if(isset($this->requestParams[$key]))
                     $dbdata[$key] += 1;
             }
 
-            // $request = $db->prepare(
-            //     'UPDATE '
-            //     .     'days_info '
-            //     . 'SET '
-            //     .    'info = ? '
-            //     . 'WHERE users_id = 1 AND date = ? ;'
-            // );
-            // $request->bindParam(1, json_encode($dbdata, JSON_UNESCAPED_UNICODE), PDO::PARAM_STR);
-            // $request->bindParam(2, date("Y-m-d"), PDO::PARAM_STR);
+            $request = $db->prepare(
+                'UPDATE '
+                .     'days_info '
+                . 'SET '
+                .    'info = ? '
+                . 'WHERE users_id = 2 AND date = ? ;'
+            );
 
-            // $request->execute();
+            $info = json_encode($dbdata, JSON_UNESCAPED_UNICODE);
+            $date = date("Y-m-d");
 
-            // $result = $request->fetch(PDO::FETCH_ASSOC);
+            $request->bindParam(1, $info, PDO::PARAM_STR);
+            $request->bindParam(2, $date, PDO::PARAM_STR);
+
+            $request->execute();
+
+            $result = $request->fetch(PDO::FETCH_ASSOC);
 
             echo PHP_EOL . '-----------------------------------------';
         }
