@@ -15,7 +15,7 @@
          */
         public function indexAction()
         {
-            echo 'This is indexAction';
+            echo "This is indexAction";
         }
 
         /**
@@ -26,7 +26,20 @@
          */
         public function viewAction()
         {
-            echo 'This is viewAction';
+            // Delete users in uri
+            array_shift($this->requestUri);
+
+            $usersId = array_shift($this->requestUri);
+            $date = array_shift($this->requestUri);
+
+            if($date)
+                $param = "users_id = {$usersId} AND date = \"{$date}\"";
+            else
+                $param = "users_id = {$usersId}";
+
+            $result = $this->getUser($param);
+
+            print_r($result);
         }
 
         /**
@@ -37,17 +50,100 @@
          */
         public function createAction()
         {
+            // Delete users in uri
+            array_shift($this->requestUri);
 
+            $usersId = array_shift($this->requestUri);
+            $date = array_shift($this->requestUri);
+            $data = $this->requestParams;
+            $params = [];
+
+            array_push($params, $usersId, $date, json_encode($data, JSON_UNESCAPED_UNICODE));
+
+            $this->createString($params);
         }
 
         /**
          * Метод PUT
-         * Вывод списка всех записей
-         * http://.../users
+         * Обновление данных записи
+         * http://.../users + параметры запроса
          * @return string
          */
         public function updateAction()
         {
+            // TODO: Проверка авторизации...
 
+            // TODO: Фильтрация...
+            
+            echo '-----------------------------------------' . PHP_EOL;
+
+            $db = Db::getConnection();
+            $request = $db->query(
+                'SELECT '
+                .     'info '
+                . 'FROM '
+                .    'days_info '
+                . 'WHERE users_id = 1;'
+            );
+
+            while ($row = $request->fetch()) {
+                $dbdata = json_decode($row['info'], true);
+            }
+
+            // foreach ($dbdata as $key => $value) {
+            //     if($this->requestParams[$key])
+            //         $dbdata[$key] += 2;
+            // }
+
+            // $request = $db->prepare(
+            //     'UPDATE '
+            //     .     'days_info '
+            //     . 'SET '
+            //     .    'info = ? '
+            //     . 'WHERE users_id = 1 AND date = ? ;'
+            // );
+            // $request->bindParam(1, json_encode($dbdata, JSON_UNESCAPED_UNICODE), PDO::PARAM_STR);
+            // $request->bindParam(2, date("Y-m-d"), PDO::PARAM_STR);
+
+            // $request->execute();
+
+            // $result = $request->fetch(PDO::FETCH_ASSOC);
+
+            print_r($this->requestParams);
+
+            print_r($dbdata);
+
+            echo PHP_EOL . '-----------------------------------------';
+        }
+
+        private function getUser($param)
+        {
+            $db = Db::getConnection();
+            $request = $db->query(
+                "SELECT date, info "
+                . "FROM days_info "
+                . "WHERE {$param}"
+            );
+
+            while($row = $request->fetch(PDO::FETCH_ASSOC))
+                return $row;
+        }
+        
+        private function createString($params)
+        {
+            $sql = "INSERT INTO days_info VALUES(?, ?, ?)";
+
+            $db = Db::getConnection();
+            $request = $db->prepare($sql);
+
+            $request->bindParam(1, $params[0], PDO::PARAM_INT);
+            $request->bindParam(2, $params[1], PDO::PARAM_STR);
+            $request->bindParam(3, $params[2], PDO::PARAM_STR);
+
+            $request->execute();
+
+            $result = $request->fetch(PDO::FETCH_ASSOC);
+
+            print_r($result);
         }
     }

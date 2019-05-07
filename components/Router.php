@@ -36,7 +36,7 @@
 
                     if($segment[0] == 'api')
                     {
-                        // Deleting first string from the $segment
+                        // Deleting first string in the $segment
                         array_shift($segment);
 
                         try {

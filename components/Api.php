@@ -21,7 +21,7 @@
             // Writing uri in array
             $this->requestUri = explode('/', trim($_SERVER['REQUEST_URI'],'/'));
             // Delete the string 'api' in first item of the array
-            //$this->requestUri = array_slice($this->requestUri, 1);
+            $this->requestUri = array_slice($this->requestUri, 1);
 
             $this->requestParams = $this->getRequestParams($this->method);
         }
@@ -51,11 +51,7 @@
         {
             switch ($this->method) {
                 case 'GET':
-                    if (isset($this->requestUri[2])) {
-                        return 'viewAction';
-                    } else {
-                        return 'indexAction';
-                    }
+                    return (isset($this->requestUri[1]) ? 'viewAction' : 'indexAction');
                     break;
                 case 'POST':
                     return 'createAction';
@@ -66,7 +62,6 @@
                 case 'PATCH':
                     return 'updateAction';
                     break;
-                
                 default:
                     return null;
             }
