@@ -34,7 +34,7 @@
 
                     $segment = explode('/', $internalRoute);
 
-                    $controllerName = array_shift($segment).'Controller';
+                    $controllerName = array_shift($segment);
 
                     if($controllerName == 'api')
                     {
@@ -51,8 +51,8 @@
                         }
                         die;
                     }
-                    
-                    $controllerName = ucfirst($controllerName);
+
+                    $controllerName = ucfirst($controllerName . 'Controller');
 
                     $actionName = 'action'.ucfirst(array_shift($segment));
 

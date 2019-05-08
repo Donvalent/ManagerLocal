@@ -12,6 +12,8 @@
 
         protected $action = '';
 
+        protected $isIndexRequest = false;
+
         public function __construct()
         {
             header("Access-Control-Allow-Orgin: *");
@@ -45,9 +47,10 @@
 
         protected function getAction()
         {
+
             switch ($this->method) {
                 case 'GET':
-                    return (isset($this->requestUri[1]) ? 'viewAction' : 'indexAction');
+                    return ($this->isIndexRequest = true) ? 'viewAction' : 'indexAction';
                     break;
                 case 'POST':
                     return 'createAction';

@@ -13,6 +13,8 @@
             parent::__construct();
 
             $this->users_id = array_shift($this->requestUri);
+            if(isset($this->users_id))
+                $this->isIndexRequest = true;
             $this->date = array_shift($this->requestUri);
         }
 
@@ -35,11 +37,11 @@
          */
         public function viewAction()
         {
-            // Delete users in uri
-            array_shift($this->requestUri);
 
-            if($date)
-                $param = "users_id = {$this->users_id} AND date = \"{$this->date}\"";
+            echo "It is the viewAction";
+
+            if($this->date)
+                $param = "users_id = {$this->users_id} AND date = '{$this->date}'";
             else
                 $param = "users_id = {$this->users_id}";
 
@@ -117,8 +119,8 @@
             $info = json_encode($dbdata, JSON_UNESCAPED_UNICODE);
 
             $request->bindParam(":info", $info, PDO::PARAM_STR);
-            $request->bindParam(":id", $users_id, PDO::PARAM_STR);
-            $request->bindParam(":date", $date, PDO::PARAM_STR);
+            $request->bindParam(":id", $this->users_id, PDO::PARAM_STR);
+            $request->bindParam(":date", $this->date, PDO::PARAM_STR);
 
             $request->execute();
 
@@ -130,17 +132,18 @@
         private function getUser($param)
         {
             $db = Db::getConnection();
-            $request = $db->prepare(
-                "SELECT date, info "
-                . "FROM days_info "
-                . "WHERE :param"
+            $request = $db->query(
+                'SELECT date, info '
+                . 'FROM days_info '
+                . "WHERE {$param}"
             );
 
-            $request->bindParam(":param", $param, PDO::PARAM_STR);
-            $request->execute();
+            $result = array();
 
             while($row = $request->fetch(PDO::FETCH_ASSOC))
-                return $row;
+                array_push($result, $row);
+
+            return $result;
         }
         
         private function createString($params)
