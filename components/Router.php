@@ -34,12 +34,11 @@
 
                     $segment = explode('/', $internalRoute);
 
-                    if(array_shift($segment) == 'api')
+                    $controllerName = array_shift($segment).'Controller';
+
+                    if($controllerName == 'api')
                     {
                         try {
-                            // if(array_shift($segment) == 'error')
-                            //     throw new RuntimeException('This method is not supported');
-
                             $modelApi = ucfirst(array_shift($segment)) . 'Api';
                             if (class_exists($modelApi)){
                                 $api = new $modelApi();
@@ -53,7 +52,6 @@
                         die;
                     }
                     
-                    $controllerName = array_shift($segment).'Controller';
                     $controllerName = ucfirst($controllerName);
 
                     $actionName = 'action'.ucfirst(array_shift($segment));
