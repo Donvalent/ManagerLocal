@@ -20,19 +20,14 @@
 
             $this->method = $_SERVER['REQUEST_METHOD'];
             // Writing uri in array
-            $this->requestUri = explode('/', trim($_SERVER['REQUEST_URI'],'/'));
-            // Delete the string 'api' in first item of the array
-            $this->requestUri = array_slice($this->requestUri, 1);
-
+            $this->requestUri = array_slice(explode('/', trim($_SERVER['REQUEST_URI'],'/')), 1);
             $this->requestParams = $this->getRequestParams($this->method);
+
+            $this->apiName = ucfirst(array_shift($this->requestUri));
         }
 
         public function run()
         {
-            if (!$this->requestUri and ucfirst(array_shift($this->requestUri)) !== $this->apiName) {
-                throw new RuntimeException('API Not Found', 404);
-            }
-
             $this->action = $this->getAction();
 
             if (method_exists($this, $this->action)) {

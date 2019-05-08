@@ -1,16 +1,4 @@
 <?php
-
-    $apiroute = 'api/error';
-
-    if ($_SERVER['REQUEST_METHOD'] == 'GET')
-        $apiroute = 'api/get';
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-        $apiroute = 'api/post';
-    if ($_SERVER['REQUEST_METHOD'] == 'PUT')
-        $apiroute = 'api/put';
-    if ($_SERVER['REQUEST_METHOD'] == 'PATCH')
-        $apiroute = 'api/patch';
-
     return array(
         // Employees
         'employees/view/([0-9]+)' => 'employees/view/$1',
@@ -27,7 +15,8 @@
         'departments' => 'departments/index',
 
         // API
-        'api' => '' . $apiroute . '',
+        'api/users' => 'api/users',
+        'api' => 'api',
 
         '' => 'site/index',
     );

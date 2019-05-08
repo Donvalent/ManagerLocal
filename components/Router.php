@@ -34,21 +34,18 @@
 
                     $segment = explode('/', $internalRoute);
 
-                    if($segment[0] == 'api')
+                    if(array_shift($segment) == 'api')
                     {
-                        // Deleting first string in the $segment
-                        array_shift($segment);
-
                         try {
-                            if(array_shift($segment) == 'error')
-                                throw new RuntimeException('This method is not supported');
+                            // if(array_shift($segment) == 'error')
+                            //     throw new RuntimeException('This method is not supported');
 
                             $modelApi = ucfirst(array_shift($segment)) . 'Api';
                             if (class_exists($modelApi)){
                                 $api = new $modelApi();
                                 echo $api->run();
                             } else
-                                throw new RuntimeException('Api not found');
+                                throw new RuntimeException('API Not Found');
 
                         } catch (Exception $e) {
                             echo json_encode(Array('error' => $e->getMessage()));

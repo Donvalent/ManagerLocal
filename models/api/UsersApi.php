@@ -5,7 +5,16 @@
 
     class UsersApi extends Api
     {
-        public $apiName = 'Users';
+        public $users_id;
+        public $date;
+
+        public function __construct()
+        {
+            parent::__construct();
+
+            $this->users_id = array_shift($this->requestUri);
+            $this->date = array_shift($this->requestUri);
+        }
 
         /**
          * Метод GET
@@ -29,13 +38,10 @@
             // Delete users in uri
             array_shift($this->requestUri);
 
-            $usersId = array_shift($this->requestUri);
-            $date = array_shift($this->requestUri);
-
             if($date)
-                $param = "users_id = {$usersId} AND date = \"{$date}\"";
+                $param = "users_id = {$this->users_id} AND date = \"{$this->date}\"";
             else
-                $param = "users_id = {$usersId}";
+                $param = "users_id = {$this->users_id}";
 
             $result = $this->getUser($param);
 
@@ -52,12 +58,9 @@
         {
             // Delete users in uri
             array_shift($this->requestUri);
-
-            $usersId = array_shift($this->requestUri);
-            $date = array_shift($this->requestUri);
             $params = [];
 
-            array_push($params, $usersId, $date, json_encode($this->requestParams), JSON_UNESCAPED_UNICODE);
+            array_push($params, $this->users_id, $this->date, json_encode($this->requestParams), JSON_UNESCAPED_UNICODE);
 
             $this->createString($params);
         }
@@ -75,13 +78,16 @@
             echo '-----------------------------------------' . PHP_EOL;
 
             $db = Db::getConnection();
-            $request = $db->query(
+            $request = $db->prepare(
                 'SELECT '
                 .     'info '
                 . 'FROM '
                 .    'days_info '
-                . 'WHERE users_id = 2;'
+                . 'WHERE users_id = :id;'
             );
+
+            $request->bindParam(':id', $this->users_id, PDO::PARAM_INT);
+            $request->execute();
 
             while ($row = $request->fetch()) {
                 $dbdata = json_decode($row['info'], true);
@@ -104,15 +110,15 @@
                 'UPDATE '
                 .     'days_info '
                 . 'SET '
-                .    'info = ? '
-                . 'WHERE users_id = 2 AND date = ? ;'
+                .    'info = :info '
+                . 'WHERE users_id = :id AND date = :date ;'
             );
 
             $info = json_encode($dbdata, JSON_UNESCAPED_UNICODE);
-            $date = date("Y-m-d");
 
-            $request->bindParam(1, $info, PDO::PARAM_STR);
-            $request->bindParam(2, $date, PDO::PARAM_STR);
+            $request->bindParam(":info", $info, PDO::PARAM_STR);
+            $request->bindParam(":id", $users_id, PDO::PARAM_STR);
+            $request->bindParam(":date", $date, PDO::PARAM_STR);
 
             $request->execute();
 
@@ -124,11 +130,14 @@
         private function getUser($param)
         {
             $db = Db::getConnection();
-            $request = $db->query(
+            $request = $db->prepare(
                 "SELECT date, info "
                 . "FROM days_info "
-                . "WHERE {$param}"
+                . "WHERE :param"
             );
+
+            $request->bindParam(":param", $param, PDO::PARAM_STR);
+            $request->execute();
 
             while($row = $request->fetch(PDO::FETCH_ASSOC))
                 return $row;
