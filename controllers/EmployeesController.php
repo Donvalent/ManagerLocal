@@ -16,8 +16,8 @@
         }
         public function actionView($id)
         {
-            $employee = array();
             $employee = Employees::getEmployeeById($id);
+            $daysInfo = Employees::getDaysInfoByDate($id, "2019-05-08");
 
             require_once(ROOT . '/view/Employees/view.php');
 

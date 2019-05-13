@@ -7,14 +7,20 @@
         <div class="card">
             <img src="https://via.placeholder.com/128" class="card-img-top" alt="">
             <div class="card-body">
-                <h5 class="card-title">Пащенко Валентин Андреевич</h5>
-                <p class="card-text">+7 (999)-999-99-99</p>
-                <p class="card-text">Donvalent@yadnex.ru</p>
-                <p class="card-text">PHP middle developer</p>
+                <h5 class="card-title"><?php echo $employee['surname'] . ' ' . $employee['name'] . ' ' . $employee['lastname']; ?></h5>
+                <p class="card-text"><?php echo $employee['phone']; ?></p>
+                <p class="card-text"><?php echo $employee['email']; ?></p>
+                <p class="card-text"><?php echo $employee['position']; ?></p>
+                <p class="card-text"><?php echo $employee['salary'] . ' руб'; ?></p>
+                <p class="card-text">
+                    <?php foreach($employee['departments'] as $item): ?>
+                        <a href="#"><? echo $item; ?></a>
+                    <?php endforeach; ?>
+                </p>
             </div>
         </div>
     </div>
-
+    <!-- Table of day info -->
     <table class="table col-lg-9">
         <thead>
             <tr scope="col">
@@ -23,18 +29,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Скайп</td>
-                <td>4:38</td>
-            </tr>
-            <tr>
-                <td>Стим</td>
-                <td>2:12</td>
-            </tr>
-            <tr>
-                <td>Косынка</td>
-                <td>1:10</td>
-            </tr>
+            <?php foreach($daysInfo as $processTitle => $time): ?>
+                <tr>
+                    <td><?php echo $processTitle; ?></td>
+                    <td><?php echo ($time < 60) ? $time . ' мин' : round($time / 60, 1) . ' ч'; ?></td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>

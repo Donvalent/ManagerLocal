@@ -315,6 +315,58 @@ class Employees
     }
 
     /**
+     * Getting Employees all days info by id
+     * 
+     * @param int $id Employees id
+     * 
+     * @return array Associative array containing
+     *               'date', 'info'
+     */
+    public static function getDaysInfo($id)
+    {
+        $daysInfo = array();
+        $db = Db::getConnection();
+
+        // Getting users info
+        $result = $db->query(
+            'SELECT date, info '
+            . 'FROM days_info '
+            . "WHERE users_id = {$id}"
+        );
+
+        $daysInfo = $result->fetch(PDO::FETCH_ASSOC);
+
+        return $daysInfo;
+    }
+
+    /**
+     * Getting Employees days info by date
+     * 
+     * @param int $id Employees id
+     * @param string $date Date
+     * 
+     * @return array Associative array containing
+     *               'date', 'info'
+     */
+    public static function getDaysInfoByDate($id, $date)
+    {
+        $daysInfo = array();
+        $db = Db::getConnection();
+
+        // Getting users info
+        $result = $db->query(
+            'SELECT info '
+            . 'FROM days_info '
+            . "WHERE users_id = {$id} AND date = '{$date}'"
+        );
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+            $daysInfo = json_decode($row['info'], true);
+
+        return $daysInfo;
+    }
+
+    /**
      * Adding new employee
      * 
      * @param
