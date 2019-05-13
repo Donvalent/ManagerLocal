@@ -39,7 +39,7 @@
 
         <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
             <select class="selectpicker" name="departments[]" multiple id="MultiplieSelect1" required>
-                <?php foreach($Departments as $department => $item): ?>
+                <?php foreach($departmentsList as $department => $item): ?>
                     <option>
                         <?php echo $item['title']; ?>
                     </option>

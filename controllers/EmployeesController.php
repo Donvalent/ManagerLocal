@@ -7,8 +7,8 @@
     {
         public function actionIndex()
         {
-            $EmployeesList = array();
-            $EmployeesList = Employees::getEmployeesList();
+            $employeesList = array();
+            $employeesList = Employees::getEmployeesList();
 
             require_once(ROOT . '/view/Employees/index.php');
 
@@ -16,8 +16,8 @@
         }
         public function actionView($id)
         {
-            $EmployeeList = array();
-            $EmployeeList = Employees::getEmployeeById($id);
+            $employee = array();
+            $employee = Employees::getEmployeeById($id);
 
             require_once(ROOT . '/view/Employees/view.php');
 
@@ -25,11 +25,11 @@
         }
         public function actionEdit($id)
         {
-            $Employee = array();
-            $Employee = Employees::getEmployeeById($id);
+            $employee = array();
+            $employee = Employees::getEmployeeById($id);
 
-            $Departments = array();
-            $Departments = Departments::getDepartmentsList();
+            $departmentsList = array();
+            $departmentsList = Departments::getDepartmentsList();
 
             if(isset($_POST['submit']))
             {
@@ -50,8 +50,8 @@
         }
         public function actionAdd()
         {
-            $Departments = array();
-            $Departments = Departments::getDepartmentsList();
+            $departmentsList = array();
+            $departmentsList = Departments::getDepartmentsList();
 
             if(isset($_POST['submit']))
             {

@@ -37,9 +37,6 @@
          */
         public function viewAction()
         {
-
-            echo "It is the viewAction";
-
             if($this->date)
                 $param = "users_id = {$this->users_id} AND date = '{$this->date}'";
             else
@@ -47,7 +44,8 @@
 
             $result = $this->getUser($param);
 
-            print_r($result);
+            if(sizeof($result))
+                print_r($result);
         }
 
         /**
@@ -58,8 +56,6 @@
          */
         public function createAction()
         {
-            // Delete users in uri
-            array_shift($this->requestUri);
             $params = [];
 
             array_push($params, $this->users_id, $this->date, json_encode($this->requestParams), JSON_UNESCAPED_UNICODE);

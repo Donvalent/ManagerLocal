@@ -17,23 +17,23 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($EmployeesList as $Employees => $Employee): ?>
+        <?php foreach($employeesList as $employees => $employee): ?>
         <tr>
-            <td><a href="/employees/view/<?php echo $Employee['id']; ?>"><i class="fa fa-share"></i></a></td>
-            <td><?php echo $Employee['name']; ?></td>
-            <td><?php echo $Employee['surname']; ?></td>
-            <td><?php echo $Employee['lastname']; ?></td>
-            <td><?php echo $Employee['gender']; ?></td>
-            <td><?php echo $Employee['position']; ?></td>
-            <td><?php echo $Employee['salary']; ?> руб</td>
+            <td><a href="/employees/view/<?php echo $employee['id']; ?>"><i class="fa fa-share"></i></a></td>
+            <td><?php echo $employee['name']; ?></td>
+            <td><?php echo $employee['surname']; ?></td>
+            <td><?php echo $employee['lastname']; ?></td>
+            <td><?php echo $employee['gender']; ?></td>
+            <td><?php echo $employee['position']; ?></td>
+            <td><?php echo $employee['salary']; ?> руб</td>
             <td>
-                <?php foreach($Employee['departments'] as $departments => $department): ?>
+                <?php foreach($employee['departments'] as $departments => $department): ?>
                 <a href="">
                      <?php echo $department; ?>
                 </a>
                 <?php endforeach; ?>
             </td>
-            <td><a href="/employees/edit/<?php echo $Employee['id']; ?>"><i class="fa fa-edit"></i></a></td>
+            <td><a href="/employees/edit/<?php echo $employee['id']; ?>"><i class="fa fa-edit"></i></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
