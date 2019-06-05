@@ -2,6 +2,8 @@
 
     include_once ROOT . '/components/Api.php'; 
     include_once ROOT . '/models/api/UsersApi.php'; 
+    include_once ROOT . '/models/api/TasksApi.php';
+    include_once ROOT . '/models/api/LoginApi.php';
 
     class Router
     {

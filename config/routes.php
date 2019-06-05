@@ -7,6 +7,9 @@
         'employees' => 'employees/index',
 
         // Tasks
+        'tasks/view/([0-9]+)' => 'tasks/view/$1',
+        'tasks/edit/([0-9]+)' => 'tasks/edit/$1',
+        'tasks/add' => 'tasks/add',
         'tasks' => 'tasks/index',
 
         // Departments
@@ -16,6 +19,8 @@
 
         // API
         'api/users' => 'api/users',
+        'api/tasks' => 'api/tasks',
+        'api/login' => 'api/login',
         'api' => 'api',
 
         '' => 'site/index',

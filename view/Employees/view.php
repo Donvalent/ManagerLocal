@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3">
         <div class="card">
-            <img src="https://via.placeholder.com/128" class="card-img-top" alt="">
+            <img src="https://via.placeholder.com/256" class="card-img-top" alt="">
             <div class="card-body">
                 <h5 class="card-title"><?php echo $employee['surname'] . ' ' . $employee['name'] . ' ' . $employee['lastname']; ?></h5>
                 <p class="card-text"><?php echo $employee['phone']; ?></p>

@@ -38,7 +38,7 @@ class Employees
     private static function getShortName($fullname)
     {
         $tname = static::trimName($fullname);
-        return $tname['surname'] . '.' . mb_substr($tname['name'], 0, 1) . '.' . mb_substr($tname['lastname'], 0, 1);
+        return $tname['surname'] . ' ' . mb_substr($tname['name'], 0, 1) . '.' . mb_substr($tname['lastname'], 0, 1) . '.';
     }
 
     /**
@@ -122,7 +122,28 @@ class Employees
         $stmt = $db->prepare($sql);
         $stmt->execute();
     }
+    
+    /**
+     * Filtering the process list
+     * 
+     * @param array $info Days info
+     * 
+     * @return array Filtered days info
+     */
+    private static function filterDaysInfo($info)
+    {
+        $filterPath = ROOT . '/config/filter_process.php';
+        $filter = include($filterPath);
 
+        $result = array();
+
+        foreach ($info as $process => $time) {
+            if(!in_array($process, $filter))
+                $result[$process] = $time;
+        }
+                
+        return $result;
+    }
     
 
     // *********************
@@ -265,6 +286,7 @@ class Employees
             $employee['name'] = $fullname['name'];
             $employee['surname'] = $fullname['surname'];
             $employee['lastname'] = $fullname['lastname'];
+            $employee['shortName'] = static::getShortName($row['fullName']);
             $employee['phone'] = $row['phone'];
             $employee['email'] = $row['email'];
             $employee['gender'] = $row['gender'];
@@ -289,6 +311,38 @@ class Employees
         }
 
         $employee['departments'] = $departments;
+
+        return $employee;
+    }
+
+    public static function getEmployeeByFullName($fullName)
+    {
+        $employee = array();
+        $db = Db::getConnection();
+
+        // Getting users info
+        $result = $db->query(
+            'SELECT users.fullName, users.id, users.phone, users.email, users.gender, positions.title as position, positions.salary '
+            . 'FROM users '
+            . 'JOIN positions on positions.id = users.position '
+            . "WHERE users.fullName = '{$fullName}';"
+        );
+
+        while($row = $result->fetch()){
+
+            $fullname = static::trimName($row['fullName']);
+
+            $employee['id'] = $row['id'];
+            $employee['name'] = $fullname['name'];
+            $employee['surname'] = $fullname['surname'];
+            $employee['lastname'] = $fullname['lastname'];
+            $employee['shortName'] = static::getShortName($row['fullName']);
+            $employee['phone'] = $row['phone'];
+            $employee['email'] = $row['email'];
+            $employee['gender'] = $row['gender'];
+            $employee['position'] = $row['position'];
+            $employee['salary'] = $row['salary'];
+        }
 
         return $employee;
     }
@@ -362,6 +416,8 @@ class Employees
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
             $daysInfo = json_decode($row['info'], true);
+        
+        $daysInfo = static::filterDaysInfo($daysInfo);
 
         return $daysInfo;
     }

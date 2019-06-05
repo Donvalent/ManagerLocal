@@ -50,7 +50,7 @@
 
             switch ($this->method) {
                 case 'GET':
-                    return ($this->isIndexRequest = true) ? 'viewAction' : 'indexAction';
+                    return ($this->isIndexRequest == true) ? 'viewAction' : 'indexAction';
                     break;
                 case 'POST':
                     return 'createAction';
