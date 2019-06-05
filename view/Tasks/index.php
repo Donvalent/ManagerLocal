@@ -2,7 +2,6 @@
 <?php  include_once(ROOT . '/view/layouts/header.html'); ?>
 
 <!-- Main -->
-<a href="/tasks/add" class="btn btn-primary"><i class="fa fa-plus"></i> Новая задача</a>
 <table class="table">
     <thead>
         <tr>
@@ -12,6 +11,7 @@
             <th scope="col">Название</th>
             <th scope="col">Статус</th>
             <th scope="col">Дата</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -25,10 +25,13 @@
             <td><?php echo $task['status']['title']; ?></td>
             <td><?php echo $task['date']; ?></td>
             <td><a href="/tasks/edit/<?php echo $task['id']; ?>"><i class="fa fa-edit"></i></a></td>
+            <td><a href="#"><i class="fa fa-minus-circle"></i></a></td>
         </tr>
     <?php endforeach;?>
     </tbody>
 </table>
+
+<a href="/tasks/add" class="btn btn-primary"><i class="fa fa-plus"></i> Новая задача</a>
 
 <!-- Footer -->
 <?php  include_once(ROOT . '/view/layouts/footer.html'); ?>

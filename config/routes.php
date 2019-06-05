@@ -24,4 +24,5 @@
         'api' => 'api',
 
         '' => 'site/index',
+        'login' => 'site/login'
     );

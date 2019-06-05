@@ -14,6 +14,7 @@
             <th scope="col">Зарплата</th>
             <th scope="col">Отделы</th>
             <th scope="col"></th>
+            <th scope="col"></th>            
         </tr>
     </thead>
     <tbody>
@@ -34,6 +35,7 @@
                 <?php endforeach; ?>
             </td>
             <td><a href="/employees/edit/<?php echo $employee['id']; ?>"><i class="fa fa-edit"></i></a></td>
+            <td><a href="#"><i class="fa fa-minus-circle"></i></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

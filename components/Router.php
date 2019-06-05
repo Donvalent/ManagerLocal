@@ -25,6 +25,7 @@
 
         public function run()
         {
+            session_start();
             // Получить строку запроса
             $uri = $this->getURI();
            
@@ -60,6 +61,13 @@
 
                     $parameters = $segment;
 
+                    if(!isset($_SESSION['id']))
+                    {
+                        include_once(ROOT . '/controllers/SiteController.php');
+                        $result = call_user_func_array(array(new SiteController(), "actionLogin"), $parameters);
+                        die;
+                    }
+
                     // Подключить файл класса-контроллера
                     $controllerFile = ROOT . '/controllers/' . $controllerName . '.php';
 
@@ -67,16 +75,8 @@
                         include_once($controllerFile);
                     }
 
-                    // Создать объект, вызвать метод (т.е. action)
-                    // if (class_exists($controllerName)){
-                    //     $controllerObject = new $controllerName;
-                    // }
-                    // else {
-                    //     die;
-                    // }
-
                     $controllerObject = new $controllerName();
-                    
+
                     $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
                     if ($result != null) {

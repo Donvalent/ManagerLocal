@@ -8,6 +8,7 @@
             <th scope="col">Название</th>
             <th scope="col">Сотрудников</th>
             <th scope="col">Максимальная зарплата</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
                 <td><a href="/departments/view/<?php echo $department['id']; ?>"><?php echo $department['title']; ?></a></td>
                 <td><?php echo $department['countEmployees']; ?></td>
                 <td><?php echo $department['maxSalary']; ?> руб</td>
+                <td><a href="#"><i class="fa fa-minus-circle"></i></a></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

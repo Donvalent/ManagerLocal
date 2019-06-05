@@ -431,4 +431,39 @@ class Employees
     {
         
     }
+
+    public static function isIsset($login)
+    {
+        $db = Db::getConnection();
+            
+        $sql = "SELECT users.id "
+        . "FROM users "
+        . "LEFT JOIN login on login.id = users.id "
+        . "WHERE login.login = '{$login}';";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            return $row['id'];
+        }
+    }
+
+    public static function isAuthentication($login, $password)
+    {
+        $db = Db::getConnection();
+        $result = array();    
+
+        $sql = "SELECT login.id, login.admin "
+        . "FROM users "
+        . "LEFT JOIN login on login.id = users.id "
+        . "WHERE login.login = '{$login}' AND login.password = '{$password}';";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $result['id'] = $row['id'];
+            $result['admin'] = $row['admin'];
+        }
+        return $result;
+    }
 }
